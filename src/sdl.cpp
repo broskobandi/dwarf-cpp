@@ -2,6 +2,7 @@
 #include <SDL2/SDL_events.h>
 #include <SDL2/SDL_mouse.h>
 #include <SDL2/SDL_render.h>
+#include <SDL2/SDL_surface.h>
 #include <stdexcept>
 #include <SDL2/SDL.h>
 #include "debug.hpp"
@@ -72,4 +73,30 @@ SDL_Point Sdl::get_mouse_pos() const {
 
 bool Sdl::has_left_click() const {
 	return SDL_GetMouseState(nullptr, nullptr) & SDL_BUTTON(SDL_BUTTON_LEFT);
+}
+
+
+SDL_Texture *Sdl::create_texture_from_bmp(std::string path) const {
+	SDL_Surface *sur = SDL_LoadBMP(path.c_str());
+	if (!sur) throw std::runtime_error("Failed to load bmp.");
+	DBG("Bmp loaded.");
+
+	SDL_Texture *tex = SDL_CreateTextureFromSurface(ren, sur);
+	if (!tex) {
+		SDL_FreeSurface(sur);
+		DBG("Surface freed.");
+		throw std::runtime_error("Failed to create texture from surface.");
+	}
+	DBG("Texture created from surface.");
+
+	SDL_FreeSurface(sur);
+	DBG("Surface freed.");
+
+	return tex;
+}
+
+
+void Sdl::copy(SDL_Texture* tex, SDL_Rect* srcrect, SDL_Rect* dstrect) const {
+	if (SDL_RenderCopy(ren, tex, srcrect, dstrect))
+		throw std::runtime_error("Failed to copy texture.");
 }

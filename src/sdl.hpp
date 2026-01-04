@@ -10,8 +10,8 @@
 
 class Sdl {
 private:
-	SDL_Window *win;
-	SDL_Renderer *ren;
+	SDL_Window* win;
+	SDL_Renderer* ren;
 	SDL_Event event;
 public:
 	Sdl(std::string title, int w, int h);
@@ -28,6 +28,8 @@ public:
 	void present() const;
 	SDL_Point get_mouse_pos() const;
 	bool has_left_click() const;
+	SDL_Texture *create_texture_from_bmp(std::string path) const;
+	void copy(SDL_Texture* tex, SDL_Rect* srcrect, SDL_Rect* dstrect) const;
 };
 
 #endif
