@@ -1,0 +1,20 @@
+[
+{
+  "directory": "/home/broskobandi/Projects/dwarf-cpp-nomodule/build",
+  "command": "/usr/bin/c++   -Wall -Wextra -Wunused-result -Wconversion -o CMakeFiles/dwarf.dir/src/game.cpp.o -c /home/broskobandi/Projects/dwarf-cpp-nomodule/src/game.cpp",
+  "file": "/home/broskobandi/Projects/dwarf-cpp-nomodule/src/game.cpp",
+  "output": "CMakeFiles/dwarf.dir/src/game.cpp.o"
+},
+{
+  "directory": "/home/broskobandi/Projects/dwarf-cpp-nomodule/build",
+  "command": "/usr/bin/c++   -Wall -Wextra -Wunused-result -Wconversion -o CMakeFiles/dwarf.dir/src/main.cpp.o -c /home/broskobandi/Projects/dwarf-cpp-nomodule/src/main.cpp",
+  "file": "/home/broskobandi/Projects/dwarf-cpp-nomodule/src/main.cpp",
+  "output": "CMakeFiles/dwarf.dir/src/main.cpp.o"
+},
+{
+  "directory": "/home/broskobandi/Projects/dwarf-cpp-nomodule/build",
+  "command": "/usr/bin/c++   -Wall -Wextra -Wunused-result -Wconversion -o CMakeFiles/dwarf.dir/src/sdl.cpp.o -c /home/broskobandi/Projects/dwarf-cpp-nomodule/src/sdl.cpp",
+  "file": "/home/broskobandi/Projects/dwarf-cpp-nomodule/src/sdl.cpp",
+  "output": "CMakeFiles/dwarf.dir/src/sdl.cpp.o"
+}
+]
