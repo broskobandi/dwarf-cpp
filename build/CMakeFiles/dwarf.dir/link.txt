@@ -1,1 +1,0 @@
-/usr/bin/c++ -Wl,--dependency-file=CMakeFiles/dwarf.dir/link.d CMakeFiles/dwarf.dir/src/game.cpp.o CMakeFiles/dwarf.dir/src/main.cpp.o CMakeFiles/dwarf.dir/src/sdl.cpp.o -o dwarf  -lSDL2

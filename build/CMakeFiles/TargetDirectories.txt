@@ -1,3 +1,0 @@
-/home/broskobandi/Projects/dwarf-cpp-nomodule/build/CMakeFiles/dwarf.dir
-/home/broskobandi/Projects/dwarf-cpp-nomodule/build/CMakeFiles/edit_cache.dir
-/home/broskobandi/Projects/dwarf-cpp-nomodule/build/CMakeFiles/rebuild_cache.dir
