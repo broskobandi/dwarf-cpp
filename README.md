@@ -4,6 +4,6 @@
 - [x] Create SDL base
 - [x] Create tile system
 - [x] Solve tile system shadows
-- [ ] Create dwarf character
+- [x] Create dwarf character
 - [ ] Solve path finding
 - [ ] Create the first job for the dwarf to carry out

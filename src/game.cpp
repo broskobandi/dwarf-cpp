@@ -1,9 +1,11 @@
 #include "game.hpp"
 #include "sdl.hpp"
+#include "dwarf.hpp"
 #include "tiles.hpp"
 #include <SDL2/SDL_events.h>
 #include <SDL2/SDL_keycode.h>
 #include <SDL2/SDL_rect.h>
+#include <SDL2/SDL_timer.h>
 
 void Game::run() {
 	constexpr int WIN_W {800};
@@ -28,6 +30,19 @@ void Game::run() {
 		}
 	);
 
+	Dwarf dwarf(
+		sdl, "../assets/dwarf10.bmp",
+		{
+			.starting_pos = {WIN_W / 2 - 32, WIN_H / 2 - 32},
+			.dstrect_size = 64,
+			.srcrect_size = 16,
+			.hitbox_size = 16,
+			.pixels_per_frame = 10,
+			.ticks_per_img = 100,
+			.num_imgs = 8
+		}
+	);
+
 	bool is_running {true};
 
 	while (is_running) {
@@ -44,11 +59,14 @@ void Game::run() {
 				left_click = true;
 			}
 		}
-		tiles.update(sdl.get_mouse_pos(), left_click);
+		// tiles.update(sdl.get_mouse_pos(), left_click);
+		tiles.update();
+		dwarf.update(SDL_GetTicks(), sdl.get_mouse_pos(), left_click);
 
 		sdl.clear({30, 70, 70, 255});
 
 		tiles.draw(sdl);
+		dwarf.draw(sdl);
 
 		sdl.present();
 	}

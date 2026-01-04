@@ -107,6 +107,15 @@ void Sdl::copy(SDL_Texture* tex, SDL_Rect* srcrect, SDL_Rect* dstrect) const {
 		throw std::runtime_error("Failed to copy texture.");
 }
 
+void Sdl::copy(SDL_Texture* tex, SDL_Rect* srcrect, SDL_Rect* dstrect, bool vflip) const {
+	if (SDL_RenderCopyEx(
+		ren, tex, srcrect, dstrect,
+		0.0f, nullptr, vflip ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE)
+	) {
+		throw std::runtime_error("Failed to copy texture.");
+	}
+}
+
 void Sdl::fill_rect(SDL_Rect rect) const {
 	if (SDL_RenderFillRect(ren, &rect))
 		throw std::runtime_error("Failed to fill rect.");

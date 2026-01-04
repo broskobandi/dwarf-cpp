@@ -32,6 +32,7 @@ public:
 	bool has_left_click() const;
 	SDL_Texture *create_texture_from_bmp(std::string path) const;
 	void copy(SDL_Texture* tex, SDL_Rect* srcrect, SDL_Rect* dstrect) const;
+	void copy(SDL_Texture* tex, SDL_Rect* srcrect, SDL_Rect* dstrect, bool vflip) const;
 	void fill_rect(SDL_Rect rect) const;
 };
 

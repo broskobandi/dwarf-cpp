@@ -45,11 +45,12 @@ Tiles::Tiles(const Sdl& sdl, std::string path_to_bmp, TilesInitData&& id) :
 Tiles::~Tiles() {
 	if (tex) {
 		SDL_DestroyTexture(tex);
-		DBG("Texture desrtoyed.");
+		DBG("Tiles texture desrtoyed.");
 	}
 }
 
-void Tiles::update(SDL_Point mouse_pos, bool left_click) {
+// void Tiles::update(SDL_Point mouse_pos, bool left_click) {
+void Tiles::update() {
 	int i = 0;
 	for (auto& tile : tiles) {
 
@@ -158,12 +159,12 @@ void Tiles::update(SDL_Point mouse_pos, bool left_click) {
 
 		// Set activity
 
-		if (!tile.is_blocked_from_above && 
-			tile.is_highlighted &&
-			left_click
-		) {
-			tile.is_active = false;
-		}
+		// if (!tile.is_blocked_from_above && 
+		// 	tile.is_highlighted &&
+		// 	left_click
+		// ) {
+		// 	tile.is_active = false;
+		// }
 
 		// Set visibility
 
@@ -179,16 +180,16 @@ void Tiles::update(SDL_Point mouse_pos, bool left_click) {
 
 		// Set highlight
 
-		if (!tile.is_blocked_from_above &&
-			mouse_pos.x >= tile.hitbox.x &&
-			mouse_pos.x <= tile.hitbox.x + hitbox_size &&
-			mouse_pos.y >= tile.hitbox.y &&
-			mouse_pos.y <= tile.hitbox.y + hitbox_size
-		) {
-			tile.is_highlighted = true;
-		} else {
-			tile.is_highlighted = false;
-		}
+		// if (!tile.is_blocked_from_above &&
+		// 	mouse_pos.x >= tile.hitbox.x &&
+		// 	mouse_pos.x <= tile.hitbox.x + hitbox_size &&
+		// 	mouse_pos.y >= tile.hitbox.y &&
+		// 	mouse_pos.y <= tile.hitbox.y + hitbox_size
+		// ) {
+		// 	tile.is_highlighted = true;
+		// } else {
+		// 	tile.is_highlighted = false;
+		// }
 
 		i++;
 	}

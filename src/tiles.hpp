@@ -51,7 +51,8 @@ public:
 	Tiles& operator=(Tiles&&) = delete;
 	Tiles(const Sdl& sdl, std::string path_to_bmp, TilesInitData&& tile_init_data);
 	~Tiles();
-	void update(SDL_Point mouse_pos, bool left_click);
+	// void update(SDL_Point mouse_pos, bool left_click);
+	void update();
 	void draw(const Sdl& sdl) const;
 };
 
