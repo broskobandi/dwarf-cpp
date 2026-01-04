@@ -3,6 +3,7 @@
 #include "tiles.hpp"
 #include <SDL2/SDL_events.h>
 #include <SDL2/SDL_keycode.h>
+#include <SDL2/SDL_rect.h>
 
 void Game::run() {
 	constexpr int WIN_W {800};
@@ -27,14 +28,20 @@ void Game::run() {
 	bool is_running {true};
 
 	while (is_running) {
+		bool left_click {false};
 		while (sdl.poll_event()) {
 			if (sdl.has_event_type(SDL_KEYDOWN) &&
 				sdl.has_keycode(SDLK_q)
 			) {
 				is_running = false;
 			}
+			if (sdl.has_event_type(SDL_MOUSEBUTTONDOWN) &&
+				sdl.has_left_click()
+			) {
+				left_click = true;
+			}
 		}
-		tiles.update();
+		tiles.update(sdl.get_mouse_pos(), left_click);
 
 		sdl.clear({30, 70, 70, 255});
 

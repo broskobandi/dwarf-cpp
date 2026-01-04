@@ -23,12 +23,24 @@ private:
 		SDL_Rect dstrect;
 		SDL_Rect hitbox;
 		SDL_Rect srcrect;
+		bool is_staggered;
+		bool is_visible {true};
+		bool is_highlighted {false};
+		bool is_blocked_from_right_down {false};
+		bool is_blocked_from_right_up {false};
+		bool is_blocked_from_left_down {false};
+		bool is_blocked_from_left_up {false};
+		bool is_blocked_from_above {false};
+		bool is_blocked_from_above_right_up {false};
+		bool is_active {true};
+		// bool test {false};
 	};
 
 	std::vector<Tile> tiles;
 	int num_tiles_per_layer;
 	int num_tiles;
 	SDL_Texture *tex;
+	SDL_Rect mouse_pointer {0, 0, 5, 5};
 
 public:
 	Tiles(const Tiles&) = delete;
@@ -37,7 +49,7 @@ public:
 	Tiles& operator=(Tiles&&) = delete;
 	Tiles(const Sdl& sdl, std::string path_to_bmp, TilesInitData&& tile_init_data);
 	~Tiles();
-	void update();
+	void update(SDL_Point mouse_pos, bool left_click);
 	void draw(const Sdl& sdl) const;
 };
 

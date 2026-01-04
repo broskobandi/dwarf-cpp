@@ -25,6 +25,10 @@ Sdl::Sdl(std::string title, int w, int h) {
 	ren = SDL_CreateRenderer(win, -1, SDL_RENDERER_PRESENTVSYNC);
 	if (!ren) throw std::runtime_error("Failed to create renderer.");
 	DBG("Renderer created.");
+
+	if (SDL_SetRenderDrawBlendMode(ren, SDL_BLENDMODE_BLEND))
+		throw std::runtime_error("Failed to set render draw blend mode.");
+
 }
 
 Sdl::~Sdl() {
@@ -49,15 +53,18 @@ bool Sdl::has_keycode(SDL_Keycode keycode) const {
 	return event.key.keysym.sym == keycode;
 }
 
+void Sdl::set_draw_color(SDL_Color color) const {
+	if (SDL_SetRenderDrawColor(ren, color.r, color.g, color.b, color.a)) 
+		throw std::runtime_error("Failed to set render draw color.");
+}
+
 void Sdl::clear() const {
 	if (SDL_RenderClear(ren))
 		throw std::runtime_error("Failed to clear renderer.");
 }
 
 void Sdl::clear(SDL_Color color) {
-	if (SDL_SetRenderDrawColor(ren, color.r, color.g, color.b, color.a)) 
-		throw std::runtime_error("Failed to set render draw color.");
-
+	set_draw_color(color);
 	clear();
 }
 
@@ -95,8 +102,12 @@ SDL_Texture *Sdl::create_texture_from_bmp(std::string path) const {
 	return tex;
 }
 
-
 void Sdl::copy(SDL_Texture* tex, SDL_Rect* srcrect, SDL_Rect* dstrect) const {
 	if (SDL_RenderCopy(ren, tex, srcrect, dstrect))
 		throw std::runtime_error("Failed to copy texture.");
+}
+
+void Sdl::fill_rect(SDL_Rect rect) const {
+	if (SDL_RenderFillRect(ren, &rect))
+		throw std::runtime_error("Failed to fill rect.");
 }
