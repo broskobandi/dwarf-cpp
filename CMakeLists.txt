@@ -27,23 +27,16 @@ target_link_libraries(${PROJECT_NAME} PRIVATE SDL2)
 target_compile_options(${PROJECT_NAME} PRIVATE -Wall -Wextra -Wunused-result -Wconversion)
 
 if (WIN)
-	FILE(MAKE_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/win)
-	add_custom_command(
-		TARGET ${PROJECT_NAME} POST_BUILD
-		COMMAND ${CMAKE_COMMAND} -E copy
-		${CMAKE_CURRENT_BINARY_DIR}/${SDL_DIR}/bin/SDL2.dll
-		${CMAKE_CURRENT_BINARY_DIR}/win/SDL2.dll
-	)
+	FILE(COPY ${CMAKE_CURRENT_SOURCE_DIR}/assets DESTINATION
+		${CMAKE_CURRENT_BINARY_DIR}/win/)
+	FILE(COPY /usr/x86_64-w64-mingw32/bin/libwinpthread-1.dll DESTINATION
+		${CMAKE_CURRENT_BINARY_DIR}/win/bin)
+	FILE(COPY ${CMAKE_CURRENT_BINARY_DIR}/${SDL_DIR}/bin/SDL2.dll DESTINATION
+		${CMAKE_CURRENT_BINARY_DIR}/win/bin)
 	add_custom_command(
 		TARGET ${PROJECT_NAME} POST_BUILD
 		COMMAND ${CMAKE_COMMAND} -E copy
 		${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}.exe
-		${CMAKE_CURRENT_BINARY_DIR}/win/${PROJECT_NAME}.exe
-	)
-	add_custom_command(
-		TARGET ${PROJECT_NAME} POST_BUILD
-		COMMAND ${CMAKE_COMMAND} -E copy
-		/usr/x86_64-w64-mingw32/bin/libwinpthread-1.dll
-		${CMAKE_CURRENT_BINARY_DIR}/win/libwinpthread-1.dll
+		${CMAKE_CURRENT_BINARY_DIR}/win/bin/${PROJECT_NAME}.exe
 	)
 endif()

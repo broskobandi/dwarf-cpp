@@ -203,8 +203,13 @@ void Tiles::update(SDL_Point mouse_pos, bool left_click) {
 }
 
 void Tiles::draw(const Sdl& sdl) const {
+	// int num = 0;
 	for (const auto& tile : tiles) {
 		if (!tile.is_visible) continue;
+		// if (tile.is_blocked_from_above &&
+		// 	tile.is_blocked_from_left_down &&
+		// 	tile.is_blocked_from_left_down
+		// ) continue;
 		if (tile.is_highlighted) {
 			SDL_SetTextureAlphaMod(tex, 128);
 		} else {
@@ -213,7 +218,9 @@ void Tiles::draw(const Sdl& sdl) const {
 		SDL_Rect srcrect = tile.srcrect;
 		SDL_Rect dstrect = tile.dstrect;
 		sdl.copy(tex, &srcrect, &dstrect);
+		// num++;
 	}
+	// std::cout << num << "\n";
 	// for (const auto& tile : tiles) {
 	// 	if (tile.test) {
 	// 		sdl.set_draw_color({255, 0, 0, 128});
