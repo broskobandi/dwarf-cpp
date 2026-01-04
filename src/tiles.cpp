@@ -3,9 +3,11 @@
 #include <SDL2/SDL_rect.h>
 #include <SDL2/SDL_render.h>
 #include <cstddef>
+#include <cstdint>
 #include <iostream>
 
 using std::size_t;
+using std::uint8_t;
 
 Tiles::Tiles(const Sdl& sdl, std::string path_to_bmp, TilesInitData&& id) :
 	TilesInitData(id),
@@ -55,6 +57,10 @@ void Tiles::update(SDL_Point mouse_pos, bool left_click) {
 
 		size_t tile_above_index =
 			static_cast<size_t>(i + num_tiles_per_layer);
+		size_t tile_right_index =
+			static_cast<size_t>(i + 1);
+		size_t tile_left_index =
+			static_cast<size_t>(i - 1);
 		size_t tile_right_down_index =
 			static_cast<size_t>(i + num_cols +
 			(tile.is_staggered ? 1 : 0));
@@ -80,6 +86,24 @@ void Tiles::update(SDL_Point mouse_pos, bool left_click) {
 			tile.is_blocked_from_above = true;
 		} else {
 			tile.is_blocked_from_above = false;
+		}
+
+		if (tile_right_index < tiles.size() &&
+			tiles.at(tile_right_index).dstrect.y == tile.dstrect.y &&
+			tiles.at(tile_right_index).is_visible
+		) {
+			tile.is_blocked_from_right = true;
+		} else {
+			tile.is_blocked_from_right = false;
+		}
+
+		if (tile_left_index < tiles.size() &&
+			tiles.at(tile_left_index).dstrect.y == tile.dstrect.y &&
+			tiles.at(tile_left_index).is_visible
+		) {
+			tile.is_blocked_from_left = true;
+		} else {
+			tile.is_blocked_from_left = false;
 		}
 
 		if (tile_left_down_index < tiles.size() &&
@@ -122,6 +146,16 @@ void Tiles::update(SDL_Point mouse_pos, bool left_click) {
 			tile.is_blocked_from_right_up = false;
 		}
 
+		if (tile_above_right_up_index < tiles.size() &&
+			tiles.at(tile_above_right_up_index).dstrect.y ==
+				tile.dstrect.y - y_offset - z_offset &&
+			tiles.at(tile_above_right_up_index).is_visible
+		) {
+			tile.is_blocked_from_above_right_up = true;
+		} else {
+			tile.is_blocked_from_above_right_up = false;
+		}
+
 		// Set activity
 
 		if (!tile.is_blocked_from_above && 
@@ -156,75 +190,62 @@ void Tiles::update(SDL_Point mouse_pos, bool left_click) {
 			tile.is_highlighted = false;
 		}
 
-		// Test indicies
-
-		// if (tile_right_down_index < tiles.size() &&
-		// 	tiles.at(tile_right_down_index).dstrect.y ==
-		// 		tile.dstrect.y + y_offset &&
-		// 	tile.is_highlighted 
-		// ) {
-		// 	tiles.at(tile_right_down_index).test = true;
-		// }
-
-		// if (tile_left_down_index < tiles.size() &&
-		// 	tiles.at(tile_left_down_index).dstrect.y ==
-		// 		tile.dstrect.y + y_offset &&
-		// 	tile.is_highlighted 
-		// ) {
-		// 	tiles.at(tile_left_down_index).test = true;
-		// }
-		
-		// if (tile_right_up_index < tiles.size() &&
-		// 	tiles.at(tile_right_up_index).dstrect.y ==
-		// 		tile.dstrect.y - y_offset &&
-		// 	tile.is_highlighted 
-		// ) {
-		// 	tiles.at(tile_right_up_index).test = true;
-		// }
-
-		// if (tile_left_up_index < tiles.size() &&
-		// 	tiles.at(tile_left_up_index).dstrect.y ==
-		// 		tile.dstrect.y - y_offset &&
-		// 	tile.is_highlighted 
-		// ) {
-		// 	tiles.at(tile_left_up_index).test = true;
-		// }
-
-		// if (tile_above_right_up_index < tiles.size() &&
-		// 	tiles.at(tile_above_right_up_index).dstrect.y ==
-		// 		tile.dstrect.y - y_offset - z_offset &&
-		// 	tile.is_highlighted 
-		// ) {
-		// 	tiles.at(tile_above_right_up_index).test = true;
-		// }
-
 		i++;
 	}
 }
 
 void Tiles::draw(const Sdl& sdl) const {
-	// int num = 0;
+	static uint8_t old_alpha = 255;
+	static uint8_t new_alpha = 255;
 	for (const auto& tile : tiles) {
+		// Check if tile should be rendered
 		if (!tile.is_visible) continue;
-		// if (tile.is_blocked_from_above &&
-		// 	tile.is_blocked_from_left_down &&
-		// 	tile.is_blocked_from_left_down
-		// ) continue;
+
+		// Set alpha if necessary
 		if (tile.is_highlighted) {
-			SDL_SetTextureAlphaMod(tex, 128);
+			new_alpha = 128;
 		} else {
-			SDL_SetTextureAlphaMod(tex, 255);
+			new_alpha = 255;
 		}
+		if (new_alpha != old_alpha) {
+			SDL_SetTextureAlphaMod(tex, new_alpha);
+		}
+		old_alpha = new_alpha;
+
+		// Get local temporary rects
 		SDL_Rect srcrect = tile.srcrect;
 		SDL_Rect dstrect = tile.dstrect;
+
+		// Render base rect
 		sdl.copy(tex, &srcrect, &dstrect);
-		// num++;
+
+		// Render shadows
+		if (tile.is_blocked_from_above_right_up) {
+			srcrect.x = srcrect_size * 5;
+			sdl.copy(tex, &srcrect, &dstrect);
+		}
+		if (!tile.is_blocked_from_right_up &&
+			!tile.is_blocked_from_right_down &&
+			!tile.is_blocked_from_right
+		) {
+			srcrect.x = srcrect_size * 2;
+			sdl.copy(tex, &srcrect, &dstrect);
+		}
+		if (
+			tile.is_blocked_from_right
+		) {
+			srcrect.x = srcrect_size * 1;
+			sdl.copy(tex, &srcrect, &dstrect);
+		}
+		if (tile.is_blocked_from_left) {
+			srcrect.x = srcrect_size * 4;
+			sdl.copy(tex, &srcrect, &dstrect);
+		}
+		if (!tile.is_blocked_from_left_down &&
+			!tile.is_blocked_from_right_down
+		) {
+			srcrect.x = srcrect_size * 3;
+			sdl.copy(tex, &srcrect, &dstrect);
+		}
 	}
-	// std::cout << num << "\n";
-	// for (const auto& tile : tiles) {
-	// 	if (tile.test) {
-	// 		sdl.set_draw_color({255, 0, 0, 128});
-	// 		sdl.fill_rect(tile.hitbox);
-	// 	}
-	// }
 }

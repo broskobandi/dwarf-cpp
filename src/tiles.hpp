@@ -26,6 +26,8 @@ private:
 		bool is_staggered;
 		bool is_visible {true};
 		bool is_highlighted {false};
+		bool is_blocked_from_right {false};
+		bool is_blocked_from_left {false};
 		bool is_blocked_from_right_down {false};
 		bool is_blocked_from_right_up {false};
 		bool is_blocked_from_left_down {false};
