@@ -1,5 +1,6 @@
 #include "sdl.hpp"
 #include <SDL2/SDL_events.h>
+#include <SDL2/SDL_mouse.h>
 #include <SDL2/SDL_render.h>
 #include <stdexcept>
 #include <SDL2/SDL.h>
@@ -61,4 +62,14 @@ void Sdl::clear(SDL_Color color) {
 
 void Sdl::present() const {
 	SDL_RenderPresent(ren);
+}
+
+SDL_Point Sdl::get_mouse_pos() const {
+	SDL_Point pos {};
+	SDL_GetMouseState(&pos.x, &pos.y);
+	return pos;
+}
+
+bool Sdl::has_left_click() const {
+	return SDL_GetMouseState(nullptr, nullptr) & SDL_BUTTON(SDL_BUTTON_LEFT);
 }

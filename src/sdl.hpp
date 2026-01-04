@@ -1,6 +1,7 @@
 #ifndef SDL_HPP
 #define SDL_HPP
 
+#include <SDL2/SDL_rect.h>
 #include <SDL2/SDL_video.h>
 #include <SDL2/SDL_pixels.h>
 #include <SDL2/SDL_render.h>
@@ -25,6 +26,8 @@ public:
 	void clear() const;
 	void clear(SDL_Color color);
 	void present() const;
+	SDL_Point get_mouse_pos() const;
+	bool has_left_click() const;
 };
 
 #endif
