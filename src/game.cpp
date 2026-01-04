@@ -37,8 +37,8 @@ void Game::run() {
 			.dstrect_size = 64,
 			.srcrect_size = 16,
 			.hitbox_size = 16,
-			.pixels_per_frame = 10,
-			.ticks_per_img = 100,
+			.pixels_per_frame = 4,
+			.ticks_per_img = 50,
 			.num_imgs = 8
 		}
 	);

@@ -1,5 +1,6 @@
 #include "dwarf.hpp"
 #include "debug.hpp"
+#include <cstdlib>
 #include <iostream>
 
 Dwarf::Dwarf(const Sdl& sdl, std::string path_to_bmp, DwarfInitData&& id) :
@@ -19,30 +20,27 @@ Dwarf::~Dwarf() {
 void Dwarf::update(Uint32 time, SDL_Point mouse_pos, bool left_click) {
 	if (left_click) {
 		has_target = true;
+		is_moving = true;
 		target.x = mouse_pos.x;
 		target.y = mouse_pos.y;
 	}
 
 	if (has_target) {
-		is_moving = true;
-		if (dstrect.x != target.x) {
-			if (dstrect.x < target.x) {
-				dstrect.x += pixels_per_frame;
-				is_looking_left = false;
-			}
-			if (dstrect.x > target.x) {
-				dstrect.x -= pixels_per_frame;
-				is_looking_left = true;
-			}
+		if (dstrect.x <= target.x - pixels_per_frame) {
+			dstrect.x += pixels_per_frame;
+			is_looking_left = false;
 		}
-		if (dstrect.y != target.y) {
-			if (dstrect.y < target.y)
-				dstrect.y += pixels_per_frame;
-			if (dstrect.y > target.y)
-				dstrect.y -= pixels_per_frame;
+		if (dstrect.x >= target.x + pixels_per_frame) {
+			dstrect.x -= pixels_per_frame;
+			is_looking_left = true;
 		}
-		if (dstrect.x < target.x + pixels_per_frame &&
-			dstrect.y < target.y + pixels_per_frame
+		if (dstrect.y <= target.y - pixels_per_frame)
+			dstrect.y += pixels_per_frame;
+		if (dstrect.y >= target.y + pixels_per_frame)
+			dstrect.y -= pixels_per_frame;
+
+		if (abs(dstrect.x - target.x) <= pixels_per_frame &&
+			abs(dstrect.y - target.y) < target.y + pixels_per_frame
 		) {
 			has_target = false;
 			is_moving = false;
