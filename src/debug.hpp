@@ -5,7 +5,7 @@
 
 #ifndef NDEBUG
 #define DBG(msg)\
-	std::cout << (msg) << "\n"
+	std::cout << "[DBG]: " << (msg) << "\n"
 #else
 #define DBG(msg)
 #endif
